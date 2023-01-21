@@ -47,7 +47,7 @@ window.plugins.line =
 
       lastThumb = null
 
-      $('.main').bind 'thumb', (e, thumb) ->
+      $('.main').on 'thumb', (e, thumb) ->
         return if thumb is lastThumb
         lastThumb = thumb
         d3.selectAll("circle.line")
