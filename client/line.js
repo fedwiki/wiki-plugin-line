@@ -20,6 +20,8 @@ async function emit($item, item) {
   // Copyright 2021 Observable, Inc.
   // Released under the ISC license.
   // https://observablehq.com/@d3/line-chart
+  //
+  // with modifications for Federated Wiki line plugin
   function LineChart(data, {
     x = ([x]) => x, // given d in data, returns the (temporal) x-value
     y = ([, y]) => y, // given d in data, returns the (quantitative) y-value
@@ -109,6 +111,24 @@ async function emit($item, item) {
         .attr("stroke-opacity", strokeOpacity)
         .attr("d", line(I));
 
+    // modified to add dots and thumb
+    svg.selectAll("circle.line")
+        .data(data)
+        .join("circle")
+          .attr("class", "line")
+          .attr("fill", "white")
+          .attr("stroke", color)
+          .attr("r", 3.5)
+          .attr("cx", d => xScale(d.t))
+          .attr("cy", d => yScale(d.y))
+          .on("mouseover", (event, d) => {
+            $item.trigger("thumb", lastThumb = d.x)
+            d3.select(event.target).attr("r", 8)
+          })
+          .on("mouseout", (event) => {
+            d3.select(event.target).attr("r", 3.5)
+          })
+
     return svg.node();
   }
 
@@ -119,7 +139,21 @@ async function emit($item, item) {
     series.map(([x, y]) => ({t: new Date(x*1000), x, y}))
   ) : series.map((p) => ({t: new Date(p.Date), y: p.Price * 1}))
 
-  console.log({d3, data, $item, item})
+  let lastThumb = null
+
+  $('.main').on("thumb", (e, thumb) => {
+    if (thumb === lastThumb) {
+      return
+    }
+    lastThumb = thumb
+    return d3.selectAll("circle.line").attr("r", d => {
+      if (d.x === thumb) {
+        return 8
+      } else {
+        return 3.5
+      }
+    })
+  })
 
   $item.append(LineChart(data, {
     x: d => d.t,
