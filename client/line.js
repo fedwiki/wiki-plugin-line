@@ -5,6 +5,7 @@
  * https://github.com/fedwiki/wiki-plugin-line/blob/master/LICENSE.txt
  */
 
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7.9.0/+esm";
 
 const extent = (data, f) => {
   const lo = Math.min(...data.map(f))
@@ -14,7 +15,6 @@ const extent = (data, f) => {
 }
 
 async function emit($item, item) {
-  const d3 = await import('https://cdn.jsdelivr.net/npm/d3@7/+esm')
 
   // Copyright 2021 Observable, Inc.
   // Released under the ISC license.
@@ -132,7 +132,8 @@ async function emit($item, item) {
   }
 
   const series = wiki.getData()
-  const data = (start = series[0][0]) > 1000000000000 ? (
+  const start = series[0][0]
+  const data = start > 1000000000000 ? (
     series.map(([x, y]) => ({t: new Date(x), x, y}))
   ) : start > 1000000000 ? (
     series.map(([x, y]) => ({t: new Date(x*1000), x, y}))
