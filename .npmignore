@@ -1,2 +1,5 @@
-/**/*.coffee
-Gruntfile.js
+scripts
+.github
+.prettier*
+.vscode
+.zed

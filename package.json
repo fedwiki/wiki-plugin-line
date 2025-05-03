@@ -25,13 +25,14 @@
     }
   ],
   "scripts": {
+    "update-authors": "node scripts/update-authors.cjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "devDependencies": {
-    "grunt": "^1.0.4",
     "grunt-git-authors": "^3.2.0"
   },
   "license": "MIT",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/fedwiki/wiki-plugin-line.git"
